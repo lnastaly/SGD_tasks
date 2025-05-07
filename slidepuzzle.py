@@ -5,7 +5,6 @@
 
 import pygame, sys, random
 from pygame.locals import *
-
 # Create the constants (go ahead and experiment with different values)
 BOARDWIDTH = 4  # number of columns in the board
 BOARDHEIGHT = 4 # number of rows in the board
@@ -57,6 +56,7 @@ def main():
     mainBoard, solutionSeq = generateNewPuzzle(80)
     SOLVEDBOARD = getStartingBoard() # a solved board is the same as the board in a start state.
     allMoves = [] # list of moves made from the solved configuration
+    movesCount = 0
 
     while True: # main game loop
         slideTo = None # the direction, if any, a tile should slide
@@ -65,6 +65,7 @@ def main():
             msg = 'Solved!'
 
         drawBoard(mainBoard, msg)
+        drawMovesCount(movesCount)
 
         checkForQuit()
         for event in pygame.event.get(): # event handling loop
@@ -82,6 +83,7 @@ def main():
                     elif SOLVE_RECT.collidepoint(event.pos):
                         resetAnimation(mainBoard, solutionSeq + allMoves) # clicked on Solve button
                         allMoves = []
+                    movesCount = 0
                 else:
                     # check if the clicked tile was next to the blank spot
 
@@ -110,6 +112,7 @@ def main():
             slideAnimation(mainBoard, slideTo, 'Click tile or press arrow keys to slide.', 8) # show slide on screen
             makeMove(mainBoard, slideTo)
             allMoves.append(slideTo) # record the slide
+            movesCount += 1
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -249,6 +252,13 @@ def drawBoard(board, message):
     DISPLAYSURF.blit(RESET_SURF, RESET_RECT)
     DISPLAYSURF.blit(NEW_SURF, NEW_RECT)
     DISPLAYSURF.blit(SOLVE_SURF, SOLVE_RECT)
+
+def drawMovesCount(movesCount):
+    font = pygame.font.Font('freesansbold.ttf', BASICFONTSIZE)
+    movesSurf = font.render('Moves: %s' % movesCount, True, WHITE)
+    movesRect = movesSurf.get_rect()
+    movesRect.topleft = (20, 50)
+    DISPLAYSURF.blit(movesSurf, movesRect)
 
 
 def slideAnimation(board, direction, message, animationSpeed):

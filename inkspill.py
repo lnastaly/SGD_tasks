@@ -79,6 +79,7 @@ def main():
     mainBoard = generateRandomBoard(boardWidth, boardHeight, difficulty)
     life = maxLife
     lastPaletteClicked = None
+    movesCount = 0
 
     while True: # main game loop
         paletteClicked = None
@@ -90,6 +91,7 @@ def main():
         drawBoard(mainBoard)
         drawLifeMeter(life)
         drawPalettes()
+        drawMovesCount(movesCount)
 
         checkForQuit()
         for event in pygame.event.get(): # event handling loop
@@ -116,6 +118,7 @@ def main():
             lastPaletteClicked = paletteClicked
             floodAnimation(mainBoard, paletteClicked)
             life -= 1
+            movesCount += 1
 
             resetGame = False
             if hasWon(mainBoard):
@@ -138,6 +141,7 @@ def main():
             mainBoard = generateRandomBoard(boardWidth, boardHeight, difficulty)
             life = maxLife
             lastPaletteClicked = None
+            movesCount = 0
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
@@ -378,6 +382,13 @@ def drawPalettes():
         top = WINDOWHEIGHT - PALETTESIZE - 10
         pygame.draw.rect(DISPLAYSURF, paletteColors[i], (left, top, PALETTESIZE, PALETTESIZE))
         pygame.draw.rect(DISPLAYSURF, bgColor,   (left + 2, top + 2, PALETTESIZE - 4, PALETTESIZE - 4), 2)
+
+def drawMovesCount(movesCount):
+    font = pygame.font.Font('freesansbold.ttf', 25)
+    movesSurf = font.render('Moves: %s' % movesCount, True, WHITE)
+    movesRect = movesSurf.get_rect()
+    movesRect.topleft = (WINDOWWIDTH - 140, 80)
+    DISPLAYSURF.blit(movesSurf, movesRect)
 
 
 def drawLifeMeter(currentLife):

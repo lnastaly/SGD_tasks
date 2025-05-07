@@ -55,6 +55,8 @@ def runGame():
                   {'x': startx - 2, 'y': starty}]
     direction = RIGHT
 
+    paused = False
+
     # Start the apple in a random place.
     apple = getRandomLocation()
 
@@ -73,6 +75,18 @@ def runGame():
                     direction = DOWN
                 elif event.key == K_ESCAPE:
                     terminate()
+                elif event.key == pygame.K_p:
+                    paused = not paused
+
+        if paused:
+            font_size = int(WINDOWHEIGHT / 10)
+            font = pygame.font.Font('freesansbold.ttf', font_size)
+            pause_text = font.render('PAUSE', True, RED)
+            pause_rect = pause_text.get_rect()
+            pause_rect.center = (WINDOWWIDTH // 2, WINDOWHEIGHT // 2)
+            DISPLAYSURF.blit(pause_text, pause_rect)
+            pygame.display.update()
+            continue
 
         # check if the worm has hit itself or the edge
         if wormCoords[HEAD]['x'] == -1 or wormCoords[HEAD]['x'] == CELLWIDTH or wormCoords[HEAD]['y'] == -1 or wormCoords[HEAD]['y'] == CELLHEIGHT:

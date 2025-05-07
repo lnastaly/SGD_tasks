@@ -121,6 +121,7 @@ def main():
             elif (clickedButton and clickedButton != pattern[currentStep]) or (currentStep != 0 and time.time() - TIMEOUT > lastClickTime):
                 # pushed the incorrect button, or has timed out
                 gameOverAnimation()
+                gameOverMessage()
                 # reset the variables for a new game:
                 pattern = []
                 currentStep = 0
@@ -208,6 +209,17 @@ def changeBackgroundAnimation(animationSpeed=40):
         FPSCLOCK.tick(FPS)
     bgColor = newBgColor
 
+def gameOverMessage():
+    if bgColor == BLACK:
+        gameOverFontColor = WHITE
+    else:
+        gameOverFontColor = BLACK
+    gameOverFont = pygame.font.SysFont('comicsans', 100)
+    gameOverSurf = gameOverFont.render('GAME OVER', True, gameOverFontColor)
+    gameOverRect = gameOverSurf.get_rect()
+    gameOverRect.midtop = (WINDOWWIDTH / 2, WINDOWHEIGHT /2 - 100)
+    DISPLAYSURF.blit(gameOverSurf, gameOverRect)
+    pygame.display.update()
 
 def gameOverAnimation(color=WHITE, animationSpeed=50):
     # play all beeps at once, then flash the background

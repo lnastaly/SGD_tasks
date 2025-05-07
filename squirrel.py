@@ -89,6 +89,12 @@ def runGame():
     gameOverStartTime = 0     # time the player lost
     winMode = False           # if the player has won
 
+    show_level_up = False
+    level_up_start_time = 0
+    LEVEL_UP_DURATION = 2000
+    currentLevel = 0
+    currentFPS = FPS
+
     # create the surfaces to hold game text
     gameOverSurf = BASICFONT.render('Game Over', True, WHITE)
     gameOverRect = gameOverSurf.get_rect()
@@ -101,6 +107,14 @@ def runGame():
     winSurf2 = BASICFONT.render('(Press "r" to restart.)', True, WHITE)
     winRect2 = winSurf2.get_rect()
     winRect2.center = (HALF_WINWIDTH, HALF_WINHEIGHT + 30)
+
+    levelUpSurf = BASICFONT.render('Level Up!', True, WHITE)
+    levelUpRect = levelUpSurf.get_rect()
+    levelUpRect.center = (HALF_WINWIDTH, HALF_WINHEIGHT)
+
+    speedUpSurf = BASICFONT.render('Game speed increased!', True, WHITE)
+    speedUpRect = speedUpSurf.get_rect()
+    speedUpRect.center = (HALF_WINWIDTH, HALF_WINHEIGHT + 30)
 
     # camerax and cameray are the top left of where the camera view is
     camerax = 0
@@ -288,6 +302,13 @@ def runGame():
                         if playerObj['size'] > WINSIZE:
                             winMode = True # turn on "win mode"
 
+                        currentLevel += 1
+                        if currentLevel % 5 == 0:
+                            currentFPS += 2
+                        DISPLAYSURF.blit(levelUpSurf, levelUpRect)
+                        show_level_up = True
+                        level_up_start_time = pygame.time.get_ticks()
+
                     elif not invulnerableMode:
                         # player is smaller and takes damage
                         invulnerableMode = True
@@ -307,8 +328,18 @@ def runGame():
             DISPLAYSURF.blit(winSurf, winRect)
             DISPLAYSURF.blit(winSurf2, winRect2)
 
+        if show_level_up and (not winMode and not gameOverMode):
+            current_time = pygame.time.get_ticks()
+            if current_time - level_up_start_time < LEVEL_UP_DURATION:
+                DISPLAYSURF.blit(levelUpSurf, levelUpRect)
+                if currentLevel % 5 == 0:
+                    DISPLAYSURF.blit(speedUpSurf, speedUpRect)
+            else:
+                show_level_up = False
+
+
         pygame.display.update()
-        FPSCLOCK.tick(FPS)
+        FPSCLOCK.tick(currentFPS)
 
 
 
