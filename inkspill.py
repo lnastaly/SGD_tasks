@@ -387,7 +387,7 @@ def drawMovesCount(movesCount):
     font = pygame.font.Font('freesansbold.ttf', 25)
     movesSurf = font.render('Moves: %s' % movesCount, True, WHITE)
     movesRect = movesSurf.get_rect()
-    movesRect.topleft = (WINDOWWIDTH - 140, 80)
+    movesRect.topleft = (60, 20)
     DISPLAYSURF.blit(movesSurf, movesRect)
 
 
