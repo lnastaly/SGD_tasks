@@ -357,8 +357,10 @@ def run_single_player(player_color=WHITE, ai_color=WHITE):
 
         if ball.rect.colliderect(player_paddle.rect) and ball.dx < 0:
             ball.dx *= -1
+            p1_score += 1
         if ball.rect.colliderect(ai_paddle.rect) and ball.dx > 0:
             ball.dx *= -1
+            p2_score += 1
 
         if ball.x < 0:
             ai_score += 1
